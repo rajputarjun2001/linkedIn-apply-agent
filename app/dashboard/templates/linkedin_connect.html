@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Connect LinkedIn - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Connect LinkedIn</h1>
+
+<div class="approval-banner pending" id="status-banner">
+    <strong id="status-title">Opening login window...</strong>
+    <p id="status-message">
+        A separate Chromium window should open with the LinkedIn login page.
+        Sign in there (including CAPTCHA or 2FA if prompted). This page will
+        update automatically when login succeeds.
+    </p>
+</div>
+
+<div class="section">
+    <p><strong>Tips</strong></p>
+    <ul>
+        <li>Check your taskbar if you do not see the Chromium window.</li>
+        <li>Do not close the Chromium window until login completes.</li>
+        <li>You have up to 5 minutes to finish signing in.</li>
+    </ul>
+</div>
+
+<p>
+    <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+</p>
+
+<script>
+(async function pollConnectStatus() {
+    const banner = document.getElementById("status-banner");
+    const title = document.getElementById("status-title");
+    const message = document.getElementById("status-message");
+
+    async function check() {
+        try {
+            const response = await fetch("/linkedin/connect/status");
+            const data = await response.json();
+
+            if (data.in_progress) {
+                title.textContent = "Waiting for LinkedIn login...";
+                message.textContent =
+                    "Complete sign-in in the Chromium window. This page will redirect when done.";
+                return;
+            }
+
+            if (data.completed && data.success) {
+                banner.className = "approval-banner approved";
+                title.textContent = "LinkedIn connected";
+                message.textContent = "Session saved. Redirecting to dashboard...";
+                window.setTimeout(() => {
+                    window.location.href = "/?success=LinkedIn+connected+successfully";
+                }, 1200);
+                return;
+            }
+
+            if (data.completed && data.error) {
+                banner.className = "approval-banner pending";
+                title.textContent = "LinkedIn connect failed";
+                message.textContent = data.error;
+                return;
+            }
+        } catch (err) {
+            title.textContent = "Checking connect status...";
+            message.textContent = "Still waiting for the login window.";
+        }
+    }
+
+    await check();
+    const interval = window.setInterval(async () => {
+        await check();
+    }, 2000);
+})();
+</script>
+{% endblock %}

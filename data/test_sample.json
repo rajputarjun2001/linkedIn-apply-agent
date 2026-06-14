@@ -1,0 +1,151 @@
+{
+  "full_name": "Jane Developer",
+  "email": "jane.developer@email.com",
+  "phone": "+1-555-0100",
+  "location": "San Francisco, CA",
+  "linkedin_url": "https://www.linkedin.com/in/janedev",
+  "github_url": "https://github.com/janedev",
+  "portfolio_url": null,
+  "summary": "Full Stack Developer with 5+ years building scalable web applications using React, Python, and cloud technologies.",
+  "skills": [
+    {
+      "name": "Python",
+      "category": "Languages",
+      "proficiency": "Expert",
+      "years": 5.0
+    },
+    {
+      "name": "React",
+      "category": "Frontend",
+      "proficiency": "Expert",
+      "years": 4.0
+    },
+    {
+      "name": "TypeScript",
+      "category": "Languages",
+      "proficiency": "Advanced",
+      "years": 3.0
+    },
+    {
+      "name": "FastAPI",
+      "category": "Backend",
+      "proficiency": "Advanced",
+      "years": 3.0
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "Database",
+      "proficiency": "Advanced",
+      "years": 4.0
+    },
+    {
+      "name": "Docker",
+      "category": "DevOps",
+      "proficiency": "Intermediate",
+      "years": 2.0
+    }
+  ],
+  "projects": [
+    {
+      "name": "TaskFlow API",
+      "description": "RESTful task management API with real-time updates.",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis"
+      ],
+      "url": null,
+      "start_date": null,
+      "end_date": null,
+      "highlights": [
+        "Designed API serving 10K+ daily requests",
+        "Implemented JWT authentication and role-based access"
+      ]
+    },
+    {
+      "name": "DevPortal Dashboard",
+      "description": "React dashboard for developer analytics and monitoring.",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "D3.js"
+      ],
+      "url": null,
+      "start_date": null,
+      "end_date": null,
+      "highlights": [
+        "Built responsive UI with 50+ reusable components",
+        "Reduced page load time by 40%"
+      ]
+    }
+  ],
+  "work_experience": [
+    {
+      "company": "TechCorp Inc.",
+      "title": "Senior Full Stack Developer",
+      "location": "San Francisco, CA",
+      "start_date": "2021-03-01",
+      "end_date": null,
+      "is_current": true,
+      "description": null,
+      "achievements": [
+        "Led migration from monolith to microservices architecture",
+        "Mentored team of 4 junior developers"
+      ],
+      "technologies": [
+        "Python",
+        "React",
+        "AWS",
+        "Kubernetes"
+      ]
+    },
+    {
+      "company": "StartupXYZ",
+      "title": "Frontend Developer",
+      "location": "Remote",
+      "start_date": "2019-06-01",
+      "end_date": "2021-02-28",
+      "is_current": false,
+      "description": null,
+      "achievements": [
+        "Developed customer-facing React application from scratch",
+        "Improved Lighthouse performance score from 65 to 92"
+      ],
+      "technologies": [
+        "React",
+        "JavaScript",
+        "CSS",
+        "Webpack"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "State University",
+      "degree": "Bachelor of Science",
+      "field_of_study": "Computer Science",
+      "start_date": null,
+      "end_date": "2019-05-01",
+      "gpa": "3.7",
+      "honors": []
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Developer - Associate",
+      "issuer": "Amazon Web Services",
+      "issue_date": "2022-08-01",
+      "expiry_date": null,
+      "credential_id": null,
+      "url": null
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Hackathon Winner",
+      "description": "First place at regional developer hackathon for AI-powered tool.",
+      "achieved_date": "2023-04-15"
+    }
+  ]
+}

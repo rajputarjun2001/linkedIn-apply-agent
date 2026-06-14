@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Recommended Jobs - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Recommended Jobs</h1>
+<p class="subtitle">Jobs with match score &ge; {{ min_score }}% requiring your approval before application.</p>
+
+{% if jobs %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Match Score</th>
+            <th>Keyword</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td><strong>{{ job.title }}</strong></td>
+            <td>{{ job.company }}</td>
+            <td>{{ job.location }}</td>
+            <td><span class="badge badge-score badge-high">{{ job.match_score }}%</span></td>
+            <td>{{ job.keyword or '-' }}</td>
+            <td>
+                <a href="{{ job.apply_url }}" target="_blank" class="btn btn-sm">LinkedIn</a>
+                <form method="post" action="/jobs/{{ job.id }}/prepare" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-primary">Prepare Application</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No recommended jobs yet. Run discovery and matching to find opportunities.</p>
+{% endif %}
+{% endblock %}

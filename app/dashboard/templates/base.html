@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Job Application Agent{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">AI Job Application Agent</div>
+        <ul class="nav-links">
+            <li><a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Dashboard</a></li>
+            <li><a href="/jobs" class="{% if '/jobs' in request.url.path %}active{% endif %}">Jobs Found</a></li>
+            <li><a href="/recommended" class="{% if '/recommended' in request.url.path %}active{% endif %}">Recommended</a></li>
+            <li><a href="/resumes" class="{% if '/resumes' in request.url.path %}active{% endif %}">Tailored Resumes</a></li>
+            <li><a href="/applications" class="{% if '/applications' in request.url.path %}active{% endif %}">Applications</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>AI Job Application Agent &mdash; Human approval required before submission. Never fabricates resume content.</p>
+    </footer>
+</body>
+</html>

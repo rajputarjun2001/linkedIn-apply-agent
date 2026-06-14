@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Preparing Application - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Preparing Application</h1>
+
+<div class="approval-banner pending" id="status-banner">
+    <strong id="status-title">Preparing application...</strong>
+    <p id="status-message">
+        Tailoring your resume for <strong>{{ job.title }}</strong> at
+        <strong>{{ job.company }}</strong>. This uses Ollama and may take several minutes.
+    </p>
+</div>
+
+<div class="section">
+    <p><strong>Steps</strong></p>
+    <ul>
+        <li>Analyze job fit (match score)</li>
+        <li>Tailor resume for this role</li>
+        <li>Generate PDF</li>
+        <li>Create application preview for your approval</li>
+    </ul>
+</div>
+
+<p>
+    <a href="/jobs" class="btn btn-secondary">Back to Jobs</a>
+</p>
+
+<script>
+(async function pollPrepareStatus() {
+    const jobId = {{ job.id }};
+    const banner = document.getElementById("status-banner");
+    const title = document.getElementById("status-title");
+    const message = document.getElementById("status-message");
+
+    async function check() {
+        try {
+            const response = await fetch(`/jobs/${jobId}/prepare/status`);
+            const data = await response.json();
+            const progress = data.progress || {};
+
+            if (data.in_progress) {
+                title.textContent = "Preparing application...";
+                message.textContent = progress.message ||
+                    "Working with Ollama — please wait...";
+                return;
+            }
+
+            if (data.completed && data.success) {
+                banner.className = "approval-banner approved";
+                title.textContent = "Application prepared";
+                message.textContent = "Redirecting to your application preview...";
+                const target = data.application_id
+                    ? `/applications/${data.application_id}`
+                    : "/applications";
+                window.setTimeout(() => {
+                    window.location.href = target;
+                }, 1200);
+                return;
+            }
+
+            if (data.completed && data.error) {
+                banner.className = "approval-banner pending";
+                title.textContent = "Prepare failed";
+                message.textContent = data.error;
+                return;
+            }
+        } catch (err) {
+            title.textContent = "Checking prepare status...";
+            message.textContent = "Still working — Ollama may take a few minutes.";
+        }
+    }
+
+    await check();
+    window.setInterval(check, 2500);
+})();
+</script>
+{% endblock %}

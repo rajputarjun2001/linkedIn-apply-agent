@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs Found - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Jobs Found</h1>
+
+<div class="filter-bar">
+    <a href="/jobs" class="btn btn-sm {% if not current_status %}active{% endif %}">All</a>
+    <a href="/jobs?status=discovered" class="btn btn-sm {% if current_status == 'discovered' %}active{% endif %}">Discovered</a>
+    <a href="/jobs?status=matched" class="btn btn-sm {% if current_status == 'matched' %}active{% endif %}">Matched</a>
+    <a href="/jobs?status=recommended" class="btn btn-sm {% if current_status == 'recommended' %}active{% endif %}">Recommended</a>
+    <a href="/jobs?status=applied" class="btn btn-sm {% if current_status == 'applied' %}active{% endif %}">Applied</a>
+</div>
+
+{% if jobs %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Match</th>
+            <th>Easy Apply</th>
+            <th>Status</th>
+            <th>Posted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td><strong>{{ job.title }}</strong></td>
+            <td>{{ job.company }}</td>
+            <td>{{ job.location }}</td>
+            <td>
+                {% if job.match_score %}
+                <span class="badge badge-score">{{ job.match_score }}%</span>
+                {% else %}-{% endif %}
+            </td>
+            <td>{% if job.is_easy_apply %}<span class="badge badge-easy">Easy Apply</span>{% else %}-{% endif %}</td>
+            <td><span class="badge">{{ job.status.value }}</span></td>
+            <td>{{ job.posting_date or '-' }}</td>
+            <td>
+                <a href="{{ job.apply_url }}" target="_blank" class="btn btn-sm">View</a>
+                <form method="post" action="/jobs/{{ job.id }}/prepare" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-primary">Prepare</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No jobs found. Run job discovery to search LinkedIn.</p>
+{% endif %}
+{% endblock %}

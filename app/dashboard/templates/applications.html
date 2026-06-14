@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Applications - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Applications</h1>
+
+<div class="filter-bar">
+    <a href="/applications" class="btn btn-sm {% if not current_status %}active{% endif %}">All</a>
+    <a href="/applications?status=pending_approval" class="btn btn-sm {% if current_status == 'pending_approval' %}active{% endif %}">Pending</a>
+    <a href="/applications?status=approved" class="btn btn-sm {% if current_status == 'approved' %}active{% endif %}">Approved</a>
+    <a href="/applications?status=submitted" class="btn btn-sm {% if current_status == 'submitted' %}active{% endif %}">Submitted</a>
+    <a href="/applications?status=rejected" class="btn btn-sm {% if current_status == 'rejected' %}active{% endif %}">Rejected</a>
+</div>
+
+{% if applications %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Job</th>
+            <th>Company</th>
+            <th>Match</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        {% set job = jobs_map.get(app.job_id) %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ job.title if job else 'Unknown' }}</td>
+            <td>{{ job.company if job else '-' }}</td>
+            <td><span class="badge badge-score">{{ app.match_score }}%</span></td>
+            <td><span class="badge badge-{{ app.status.value }}">{{ app.status.value }}</span></td>
+            <td>{{ app.created_at.strftime('%Y-%m-%d %H:%M') if app.created_at else '-' }}</td>
+            <td><a href="/applications/{{ app.id }}" class="btn btn-sm">Review</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No applications yet.</p>
+{% endif %}
+{% endblock %}

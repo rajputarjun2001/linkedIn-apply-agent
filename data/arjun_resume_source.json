@@ -1,0 +1,115 @@
+{
+  "personalInfo": {
+    "fullName": "Arjun Singh Rajput",
+    "location": "Faridabad, Haryana, India",
+    "phone": "+91-8810285492",
+    "email": "rajputarjun1708@gmail.com",
+    "linkedin": "Arjun",
+    "github": "GitHub"
+  },
+  "summary": "Frontend Developer skilled in ReactJS, Next.js, Redux-Saga, and modern UI frameworks, delivering scalable and high-performance ERP and web applications. Expert at creating clean, user-centric interfaces with seamless API integrations to drive engagement and efficiency. Proven ability to translate complex requirements into intuitive, enterprise-grade solutions. Passionate about evolving into a Full-Stack Developer to build end-to-end, impactful applications.",
+  "experience": [
+    {
+      "company": "IDesign.market",
+      "position": "Frontend Developer",
+      "startDate": "2023-04",
+      "endDate": "Present",
+      "responsibilities": [
+        "Developed enterprise-level ERP modules using ReactJS, Next.js, Redux-Saga, RESTful APIs, MUI, DataGrid, and Ag-Grid.",
+        "Built project management module with reusable MUI components and REST API integrations.",
+        "Engineered timeline/task manager with auto-scheduling algorithm and predecessor task logic.",
+        "Developed quotation module with drag-and-drop row reordering and advanced pricing logic.",
+        "Built centralized inventory management system with CRUD operations, search, and filtering."
+      ],
+      "achievements": [
+        "Reduced manual planning efforts by 87%.",
+        "Improved pricing accuracy and reduced processing time by 40%.",
+        "Boosted user engagement by 13x.",
+        "Contributed to generating over $1M+ revenue.",
+        "Reduced churn rate by 43%.",
+        "Reduced average load time by 28%.",
+        "Achieved Lighthouse score above 90."
+      ]
+    },
+    {
+      "company": "IIT Roorkee",
+      "position": "Frontend Developer",
+      "location": "Roorkee, India",
+      "startDate": "2022-07",
+      "endDate": "2022-09",
+      "responsibilities": [
+        "Designed and developed web applications using HTML5, CSS3, and JavaScript.",
+        "Ensured accessibility standards and cross-browser/mobile compatibility.",
+        "Used Git and GitHub for version control."
+      ],
+      "achievements": [
+        "Achieved Lighthouse score of 90+."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Gautam Buddha University",
+      "degree": "B.Tech",
+      "field": "Computer Science and Engineering",
+      "cgpa": "9.2",
+      "startDate": "2019-08",
+      "endDate": "2023-05",
+      "location": "Greater Noida, India"
+    },
+    {
+      "institution": "Kendriya Vidyalaya No.1",
+      "qualification": "Class 12",
+      "board": "CBSE",
+      "percentage": "75%",
+      "startDate": "2018-04",
+      "endDate": "2019-05",
+      "location": "Faridabad, India"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Eye on Crypto and its Extension",
+      "techStack": ["MongoDB", "Express.js", "React.js", "Node.js"],
+      "duration": "2021-11 to 2022-01",
+      "features": [
+        "CRUD operations",
+        "User authentication",
+        "REST APIs",
+        "MVC architecture",
+        "Cryptocurrency tracking",
+        "Watchlist management",
+        "Real-time crypto news",
+        "Microsoft Edge extension"
+      ],
+      "achievements": ["360 downloads on Microsoft Edge Store."]
+    },
+    {
+      "name": "Quiz-Land",
+      "techStack": ["Node.js", "Express.js", "Mongoose"],
+      "duration": "2021-05 to 2021-07",
+      "features": [
+        "Quiz platform using Open Trivia API",
+        "User authentication",
+        "Razorpay payment integration",
+        "Linguistic-based chatbot"
+      ]
+    }
+  ],
+  "skills": {
+    "languages": ["HTML", "CSS", "JavaScript", "C++"],
+    "frameworksAndLibraries": ["React.js", "Next.js", "Redux", "Redux Saga"],
+    "uiLibraries": ["Material UI", "Ag-Grid", "Ant Design", "React Bootstrap", "DHTMLX Gantt"],
+    "tools": ["VS Code", "Postman", "Git", "MongoDB Compass", "Heroku", "Google Cloud Platform", "Android Studio"]
+  },
+  "references": [
+    {
+      "name": "Gaurav Mithas",
+      "designation": "Team Lead (Frontend)",
+      "organization": "Publicis Sapient",
+      "location": "Noida",
+      "phone": "+91-8810381647",
+      "email": "grvmithas@gmail.com"
+    }
+  ]
+}

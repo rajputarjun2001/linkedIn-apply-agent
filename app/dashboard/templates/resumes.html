@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Tailored Resumes - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Tailored Resumes</h1>
+<p class="subtitle">ATS-optimized resumes generated from your master resume. No fabricated content.</p>
+
+{% if resumes %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Job</th>
+            <th>Company</th>
+            <th>Created</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resume in resumes %}
+        <tr>
+            <td>{{ resume.id }}</td>
+            <td>{{ resume.job_title or 'N/A' }}</td>
+            <td>{{ resume.job_company or 'N/A' }}</td>
+            <td>{{ resume.created_at }}</td>
+            <td>
+                {% if resume.pdf_path %}
+                <a href="/resumes/download/{{ resume.id }}" class="btn btn-sm btn-primary">Download PDF</a>
+                {% else %}-{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No tailored resumes yet. Prepare an application to generate one.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Application #{{ application.id }} - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Application Review</h1>
+
+<div class="approval-banner {% if application.status.value == 'pending_approval' %}pending{% elif application.status.value == 'approved' %}approved{% else %}other{% endif %}">
+    <strong>Status:</strong> {{ application.status.value | replace('_', ' ') | title }}
+    {% if application.match_score < min_score %}
+    <span class="warning-text"> — Below minimum match score ({{ min_score }}%)</span>
+    {% endif %}
+</div>
+
+<div class="detail-grid">
+    <section class="detail-card">
+        <h2>Job Details</h2>
+        {% if job %}
+        <dl>
+            <dt>Title</dt><dd>{{ job.title }}</dd>
+            <dt>Company</dt><dd>{{ job.company }}</dd>
+            <dt>Location</dt><dd>{{ job.location }}</dd>
+            <dt>Match Score</dt><dd><span class="badge badge-score">{{ application.match_score }}%</span></dd>
+            <dt>LinkedIn</dt><dd><a href="{{ job.apply_url }}" target="_blank">Open Job Posting</a></dd>
+        </dl>
+        {% endif %}
+    </section>
+
+    <section class="detail-card">
+        <h2>Resume Used</h2>
+        {% if application.resume_pdf_path %}
+        <p>Tailored resume PDF generated from master resume.</p>
+        <a href="/resumes/download/{{ application.resume_id }}" class="btn btn-primary">Download Resume PDF</a>
+        {% else %}
+        <p>No resume PDF available.</p>
+        {% endif %}
+    </section>
+</div>
+
+{% if application.application_answers %}
+<section class="section">
+    <h2>Application Answers (Draft)</h2>
+    <div class="answers-list">
+        {% for question, answer in application.application_answers.items() %}
+        <div class="answer-item">
+            <strong>{{ question }}</strong>
+            <p>{{ answer }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if job and job.description %}
+<section class="section">
+    <h2>Job Description</h2>
+    <div class="job-description">{{ job.description[:2000] }}{% if job.description|length > 2000 %}...{% endif %}</div>
+</section>
+{% endif %}
+
+<section class="section approval-actions">
+    <h2>Actions</h2>
+    <p class="safety-notice">
+        <strong>Safety:</strong> This system never auto-submits applications.
+        You must manually complete LinkedIn Easy Apply, then record submission here.
+    </p>
+
+    {% if application.status.value == 'pending_approval' %}
+    <div class="action-buttons">
+        {% if application.match_score >= min_score %}
+        <form method="post" action="/applications/{{ application.id }}/approve">
+            <button type="submit" class="btn btn-success">Approve Application</button>
+        </form>
+        {% else %}
+        <p class="warning-text">Cannot approve: match score below {{ min_score }}% threshold.</p>
+        {% endif %}
+        <form method="post" action="/applications/{{ application.id }}/reject">
+            <input type="text" name="reason" placeholder="Rejection reason (optional)">
+            <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+    </div>
+    {% elif application.status.value == 'approved' %}
+    <div class="action-buttons">
+        <p>Application approved. Complete Easy Apply on LinkedIn, then mark as submitted.</p>
+        <form method="post" action="/applications/{{ application.id }}/submit">
+            <input type="text" name="notes" placeholder="Submission notes (optional)">
+            <button type="submit" class="btn btn-primary">Mark as Submitted</button>
+        </form>
+    </div>
+    {% endif %}
+</section>
+
+{% if history %}
+<section class="section">
+    <h2>Application History</h2>
+    <table class="data-table">
+        <thead>
+            <tr><th>Action</th><th>Details</th><th>By</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.action }}</td>
+                <td>{{ entry.details or '-' }}</td>
+                <td>{{ entry.performed_by }}</td>
+                <td>{{ entry.created_at.strftime('%Y-%m-%d %H:%M') if entry.created_at else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+{% endblock %}

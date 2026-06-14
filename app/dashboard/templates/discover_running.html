@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Job Discovery - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Job Discovery Running</h1>
+
+<div class="approval-banner pending" id="status-banner">
+    <strong id="status-title">Searching LinkedIn...</strong>
+    <p id="status-message">
+        Discovery is running in the background. This can take several minutes while
+        jobs are scraped and matched with Ollama. You can keep this tab open — it will
+        redirect when finished.
+    </p>
+</div>
+
+<div class="section">
+    <p><strong>What is happening</strong></p>
+    <ul>
+        <li>Searching LinkedIn for Easy Apply jobs using your keywords and locations.</li>
+        <li>Matching discovered jobs against your resume with Ollama.</li>
+        <li>Preparing recommendations above your match threshold.</li>
+    </ul>
+</div>
+
+<p>
+    <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="/jobs" class="btn btn-secondary">View Jobs Found</a>
+</p>
+
+<script>
+(async function pollDiscoveryStatus() {
+    const banner = document.getElementById("status-banner");
+    const title = document.getElementById("status-title");
+    const message = document.getElementById("status-message");
+
+    async function check() {
+        try {
+            const response = await fetch("/discover/status");
+            const data = await response.json();
+            const progress = data.progress || {};
+
+            if (data.in_progress) {
+                title.textContent = "Job discovery in progress...";
+                if (progress.message) {
+                    message.textContent = progress.message;
+                } else {
+                    message.textContent =
+                        "Still working. LinkedIn scraping and AI matching can take a few minutes.";
+                }
+                if (progress.total > 0) {
+                    message.textContent += ` (${progress.current || 0}/${progress.total})`;
+                }
+                return;
+            }
+
+            if (data.completed && data.success && data.result) {
+                const discovered = data.result.discovered_count ?? 0;
+                const recommended = data.result.recommended_count ?? 0;
+                banner.className = "approval-banner approved";
+                title.textContent = "Job discovery complete";
+                message.textContent =
+                    `Discovered ${discovered} jobs and recommended ${recommended}. Redirecting...`;
+                const msg = encodeURIComponent(
+                    `Discovered ${discovered} jobs, recommended ${recommended}`
+                );
+                window.setTimeout(() => {
+                    window.location.href = `/?success=${msg}`;
+                }, 1200);
+                return;
+            }
+
+            if (data.completed && data.error) {
+                banner.className = "approval-banner pending";
+                title.textContent = "Job discovery failed";
+                message.textContent = data.error;
+                return;
+            }
+        } catch (err) {
+            title.textContent = "Checking discovery status...";
+            message.textContent = "Still waiting for the discovery pipeline.";
+        }
+    }
+
+    await check();
+    window.setInterval(check, 3000);
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Job Application Agent{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+{% if error %}
+<div class="approval-banner pending"><strong>Error:</strong> {{ error }}</div>
+{% endif %}
+{% if success %}
+<div class="approval-banner approved"><strong>Success:</strong> {{ success }}</div>
+{% endif %}
+
+<div class="action-bar">
+    {% if linkedin_status and linkedin_status.status == 'connected' %}
+    <form method="post" action="/discover">
+        <button type="submit" class="btn btn-primary">Run Job Discovery Now</button>
+    </form>
+    {% else %}
+    <button type="button" class="btn btn-primary" disabled title="Connect LinkedIn first">Run Job Discovery Now</button>
+    {% endif %}
+    <a href="/linkedin/connect" class="btn btn-secondary">Connect LinkedIn</a>
+    {% if linkedin_status and linkedin_status.session_exists %}
+    <form method="post" action="/linkedin/disconnect" style="display:inline;">
+        <button type="submit" class="btn btn-danger">Disconnect LinkedIn</button>
+    </form>
+    {% endif %}
+</div>
+
+{% if linkedin_status %}
+<div class="section">
+    <p>
+        <strong>LinkedIn:</strong>
+        {% if linkedin_status.status == 'connected' %}
+        <span class="badge badge-easy">Connected</span>
+        {% elif linkedin_status.status == 'expired' %}
+        <span class="badge badge-pending">Session Expired</span>
+        {% else %}
+        <span class="badge badge-rejected">Disconnected</span>
+        {% endif %}
+        <span class="text-muted">Sign in manually via headed browser — no credentials stored.</span>
+    </p>
+</div>
+{% endif %}
+
+{% if ollama_status %}
+<div class="section">
+    <p>
+        <strong>Ollama:</strong>
+        {% if ollama_status.connected and ollama_status.model_ready %}
+        <span class="badge badge-easy">Connected ({{ ollama_status.model }})</span>
+        {% elif ollama_status.connected %}
+        <span class="badge badge-pending">Connected — model {{ ollama_status.model }} missing</span>
+        {% else %}
+        <span class="badge badge-rejected">Disconnected — run <code>ollama serve</code></span>
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total_jobs or 0 }}</div>
+        <div class="stat-label">Jobs Found</div>
+    </div>
+    <div class="stat-card highlight">
+        <div class="stat-value">{{ stats.recommended_jobs or 0 }}</div>
+        <div class="stat-label">Recommended Jobs</div>
+    </div>
+    <div class="stat-card warning">
+        <div class="stat-value">{{ stats.pending_approvals or 0 }}</div>
+        <div class="stat-label">Pending Approvals</div>
+    </div>
+    <div class="stat-card success">
+        <div class="stat-value">{{ stats.submitted_applications or 0 }}</div>
+        <div class="stat-label">Submitted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.tailored_resumes or 0 }}</div>
+        <div class="stat-label">Tailored Resumes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "%.0f"|format(stats.avg_match_score or 0) }}%</div>
+        <div class="stat-label">Avg Match Score</div>
+    </div>
+</div>
+
+{% if pending %}
+<section class="section">
+    <h2>Pending Approvals</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Job ID</th>
+                <th>Match Score</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in pending %}
+            <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ app.job_id }}</td>
+                <td><span class="badge badge-score">{{ app.match_score }}%</span></td>
+                <td><span class="badge badge-pending">{{ app.status.value }}</span></td>
+                <td>{{ app.created_at.strftime('%Y-%m-%d %H:%M') if app.created_at else '-' }}</td>
+                <td><a href="/applications/{{ app.id }}" class="btn btn-sm">Review</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+{% endblock %}
